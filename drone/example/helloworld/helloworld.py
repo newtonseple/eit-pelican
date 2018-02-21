@@ -1,8 +1,18 @@
 from dronekit import connect
 import sys
 
+#simualtor imports
+import dronekit_sitl
+
 # Connect to UDP endpoint (and wait for default attributes to accumulate)
-target = sys.argv[1] if len(sys.argv) >= 2 else 'udpin:0.0.0.0:14550'
+# Device
+target = 'udpin:0.0.0.0:14550' #Drone
+
+# SIMULATOR ACTIVATION
+sitl = dronekit_sitl.start_default()
+target = sitl.connection_string()
+# END SIMULATOR ACTIVATION
+
 print 'Connecting to ' + target + '...'
 vehicle = connect(target, wait_ready=True)
 
