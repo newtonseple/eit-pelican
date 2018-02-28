@@ -83,7 +83,7 @@ a_location1 = LocationGlobalRelative(63.412040,10.409221,12)
 vehicle.simple_goto(a_location1)
 
 
-while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.5 and math.abs(vehicle.location.global_relative_frame.alt - a_location1.alt) >= 0.4:
+while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.5 and abs(vehicle.location.global_relative_frame.alt - a_location1.alt) >= 0.4:
     print "Flying to specified location. Current position: ", vehicle.location.global_relative_frame
     time.sleep(1)
 print "Reaced target location"
