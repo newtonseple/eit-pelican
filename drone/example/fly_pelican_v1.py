@@ -83,7 +83,7 @@ a_location1 = LocationGlobalRelative(63.412040,10.409221,12)
 vehicle.simple_goto(a_location1)
 
 
-while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.2
+while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.2:
     print " Flying to specified location. Current position: ", vehicle.location.global_relative_frame
     print " Lateral distance to target: ", get_distance_metres(vehicle.location.global_relative_frame, a_location1), "m"
     time.sleep(1)
