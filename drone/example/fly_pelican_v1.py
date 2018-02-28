@@ -79,7 +79,7 @@ vehicle.airspeed = 3
 
 
 # Set target location in global-relative frame
-a_location = LocationGlobalRelative(63.412040,10.409221,12)
+a_location1 = LocationGlobalRelative(63.412040,10.409221,12)
 vehicle.simple_goto(a_location)
 
 
