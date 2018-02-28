@@ -111,4 +111,9 @@ print "Reaced target location"
 print "Returning to launch site"
 vehicle.mode = VehicleMode("RTL")
 
+while True:
+    print "Flying home. Current altitude: ", vehicle.location.global_relative_frame.alt, "m"
+    time.sleep(1)
+
+
 vehicle.close()

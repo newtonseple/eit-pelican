@@ -9,8 +9,8 @@ import dronekit_sitl
 target = 'udpin:0.0.0.0:14550' #Drone
 
 # SIMULATOR ACTIVATION
-sitl = dronekit_sitl.start_default()
-target = sitl.connection_string()
+# sitl = dronekit_sitl.start_default()
+# target = sitl.connection_string()
 # END SIMULATOR ACTIVATION
 
 print 'Connecting to ' + target + '...'
