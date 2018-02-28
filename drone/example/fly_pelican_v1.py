@@ -85,7 +85,7 @@ vehicle.simple_goto(a_location1)
 
 while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.3:
     print " Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
-    "  Lateral distance to target: ", get_distance_metres(vehicle.location.global_relative_frame, a_location1), "m"
+    "  Lateral distance to target: ", "%.3f" % get_distance_metres(vehicle.location.global_relative_frame, a_location1), "m"
     time.sleep(1)
 print "Reaced target location"
 
