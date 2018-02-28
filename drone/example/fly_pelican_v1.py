@@ -84,7 +84,7 @@ vehicle.simple_goto(a_location1)
 
 
 while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.3:
-    print " Flying to specified location. Current position: ", vehicle.location.global_relative_frame
+    print " Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m"
     print " Lateral distance to target: ", get_distance_metres(vehicle.location.global_relative_frame, a_location1), "m"
     time.sleep(1)
 print "Reaced target location"
@@ -94,7 +94,7 @@ a_location2 = LocationGlobalRelative(63.412167,10.409146,8)
 vehicle.simple_goto(a_location2)
 
 while get_distance_metres(vehicle.location.global_relative_frame, a_location2) >= 0.3: 
-    print "Flying to specified location. Current position: ", vehicle.location.global_relative_frame
+    print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m"
     print "Lateral distance to target: ", get_distance_metres(vehicle.location.global_relative_frame, a_location2), "m"
     time.sleep(1)
 print "Reaced target location"
@@ -103,7 +103,7 @@ a_location3 = LocationGlobalRelative(63.412220,10.409240,10)
 vehicle.simple_goto(a_location3)
 
 while get_distance_metres(vehicle.location.global_relative_frame, a_location3) >= 0.3:
-    print "Flying to specified location. Current position: ", vehicle.location.global_relative_frame
+    print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m"
     print " Lateral distance to target: ", get_distance_metres(vehicle.location.global_relative_frame, a_location3), "m"
     time.sleep(1)
 print "Reaced target location"
