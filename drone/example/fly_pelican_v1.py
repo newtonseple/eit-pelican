@@ -80,7 +80,7 @@ vehicle.airspeed = 3
 
 # Set target location in global-relative frame
 a_location1 = LocationGlobalRelative(63.412040,10.409221,12)
-vehicle.simple_goto(a_location)
+vehicle.simple_goto(a_location1)
 
 
 while get_distance_metres(vehicle.location.global_relative_frame, a_location1) >= 0.5 and math.abs(vehicle.location.global_relative_frame.alt - a_location1.alt) >= 0.4:
