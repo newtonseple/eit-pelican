@@ -99,7 +99,7 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     Nt = int(math.ceil(Nt))
     t = numpy.linspace(0,L2,num=Nt)
     y1= numpy.zeros((2, Nt))
-    y2 = y1
+    y2= numpy.zeros((2, Nt))
 
     for i in range(0, Nt):
         y1[0, i] = A[0] + t[i]*(D[0]-A[0])/L2
