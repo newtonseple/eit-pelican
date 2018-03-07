@@ -72,7 +72,7 @@ def goto_position(position):
     		time.sleep(1)
 print "Reaced target location"
 
-def coarse_search(A, B, C, D, dt, search_altitude)
+def coarse_search(A, B, C, D, dt, search_altitude):
 
 #Define the grid
     L1 = get_distance_metres(A,B)
