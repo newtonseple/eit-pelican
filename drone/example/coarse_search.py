@@ -105,14 +105,8 @@ def coarse_search(A, B, C, D, dt, search_altitude)
 			goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
 			side = 1
 
-
-
-# GRID DEFINING ===================================================================================================================
-
-# ASSUME A, B, C, D IS DEFINED A = [lat, lon]
-
-# Incremental stepping upwards and search altitude
-
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
+coarse_search(A, B, C, D, dt, search_altitude)
+
