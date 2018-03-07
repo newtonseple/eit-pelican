@@ -67,15 +67,15 @@ def goto_position(position):
 
 #While the drone is flying to new position, wait
 	while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
-    print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
-	    		"  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
+    		print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
+		"  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
     time.sleep(1)
 print "Reaced target location"
 
 def coarse_search(A, B, C, D, dt, search_altitude)
 
 #Define the grid
-	L1 = get_distance_metres(A,B)
+    L1 = get_distance_metres(A,B)
     L2 = get_distance_metres(A,D)
 
     Nt = L2/dt + 1
