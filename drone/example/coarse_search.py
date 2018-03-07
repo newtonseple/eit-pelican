@@ -92,7 +92,9 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     D1 = LocationGlobalRelative(D[0], D[1], search_altitude)
     L1 = get_distance_metres(A1, B1)
     L2 = get_distance_metres(A1, D1)
-
+    print 'L1 = ',L1
+    print 'L2 = ',L2
+    
     Nt = L2/dt + 1
     Nt = int(math.ceil(Nt))
     t = numpy.linspace(0,L2,num=Nt)
@@ -128,6 +130,8 @@ def coarse_search(A, B, C, D, dt, search_altitude):
         print 'Starting new iteration! Current iteration', 'i = ',i, ' Side = ',side 
   
     vehicle.mode = VehicleMode("RTL")
+    print 'Returning home. Mission not completed'
+    vehicle.close()
 
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
