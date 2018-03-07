@@ -80,7 +80,6 @@ def goto_position(position):
             print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
         "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
             time.sleep(1)
-            print 'Current position ', vehicle.location.global_frame
 print "Reaced target location"
 
 def coarse_search(A, B, C, D, dt, search_altitude):
@@ -106,8 +105,6 @@ def coarse_search(A, B, C, D, dt, search_altitude):
         y1[1, i] = A[1] + t[i]*(D[1]-A[1])/L2
         y2[0, i] = B[0] + t[i]*(C[0]-B[0])/L2
         y2[1, i] = B[1] + t[i]*(C[1]-B[1])/L2
-    print y1
-    print y2
     dt_check = L2/(Nt-1)
     print 'The calculated dt is', dt_check, 'm'
 
