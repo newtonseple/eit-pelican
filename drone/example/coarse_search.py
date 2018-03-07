@@ -102,7 +102,7 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     side = 1
     for i in range(1, Nt):
         if side is 1:
-        goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
+            goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
             goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
             side = 0
         elif side is 0:
