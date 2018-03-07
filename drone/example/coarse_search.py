@@ -76,7 +76,7 @@ def goto_position(position):
     vehicle.simple_goto(position)
 
 #While the drone is flying to new position, wait
-    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.3:
+    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
             print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
         "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
             time.sleep(1)
@@ -131,4 +131,4 @@ def coarse_search(A, B, C, D, dt, search_altitude):
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
-coarse_search([63.41209483064148, 10.408899100524877], [63.41209483064148, 10.40934434722135], [63.412327722265836, 10.408899100524877], [63.412327722265836, 10.40934434722135], 1, 3)
+coarse_search([63.41209483064148, 10.408899100524877], [63.41209483064148, 10.40934434722135], [63.412327722265836, 10.408899100524877], [63.412327722265836, 10.40934434722135], 2, 3)
