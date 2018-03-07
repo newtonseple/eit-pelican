@@ -1,6 +1,6 @@
 import math
 import dronekit
-from numpy import linspace, multiply
+import numpy
 
 #Start SITL if no connection string specified
 if not connection_string:
@@ -109,6 +109,8 @@ def coarse_search(A, B, C, D, dt, search_altitude):
             goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
             goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
             side = 1
+
+	vehicle.mode = VehicleMode("RTL")
 
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
