@@ -61,7 +61,6 @@ def arm_and_takeoff(aTargetAltitude):
 def get_distance_metres(aLocation1, aLocation2):
     """
     Returns the ground distance in metres between two `LocationGlobal` or `LocationGlobalRelative` objects.
-
     This method is an approximation, and will not be accurate over large distances and close to the
     earth's poles. It comes from the ArduPilot test code:
     https://github.com/diydrones/ardupilot/blob/master/Tools/autotest/common.py
@@ -74,20 +73,24 @@ def get_distance_metres(aLocation1, aLocation2):
 def goto_position(position):
 
 # Send drone to position
-	vehicle.simple_goto(position)
+    vehicle.simple_goto(position)
 
 #While the drone is flying to new position, wait
-	while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
-    		print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
-		"  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
-    		time.sleep(1)
+    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
+            print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
+        "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
+            time.sleep(1)
 print "Reaced target location"
 
 def coarse_search(A, B, C, D, dt, search_altitude):
 
 #Define the grid
-    L1 = get_distance_metres(A,B)
-    L2 = get_distance_metres(A,D)
+    A = LocationGlobalRelative(A[0], A[1], search_altitude)
+    B = LocationGlobalRelative(B[0], B[1], search_altitude)
+    C = LocationGlobalRelative(C[0], C[1], search_altitude)
+    D = LocationGlobalRelative(D[0], D[1], search_altitude)
+    L1 = get_distance_metres(A, B)
+    L2 = get_distance_metres(A, D)
 
     Nt = L2/dt + 1
     Nt = int(math.ceil(Nt))
@@ -96,10 +99,10 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     y2 = y1
 
     for i in range(0, Nt-1):
-	y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
-	y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
-	y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
-	y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
+    y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
+    y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
+    y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
+    y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
 
     dt_check = L2/(Nt-1)
     print('The calculated dt is', dt_check, 'm')
@@ -121,12 +124,9 @@ def coarse_search(A, B, C, D, dt, search_altitude):
             goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
             side = 1
 
-	vehicle.mode = VehicleMode("RTL")
+    vehicle.mode = VehicleMode("RTL")
 
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
 coarse_search([63.41209483064148, 10.408899100524877], [63.41209483064148, 10.40934434722135], [63.412327722265836, 10.408899100524877], [63.412327722265836, 10.40934434722135], 1, 3)
-
-			
-			
