@@ -76,7 +76,7 @@ def goto_position(position):
     vehicle.simple_goto(position)
 
 #While the drone is flying to new position, wait
-    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
+    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.1:
             print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
         "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
             time.sleep(1)
@@ -105,14 +105,14 @@ def coarse_search(A, B, C, D, dt, search_altitude):
         y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
 
     dt_check = L2/(Nt-1)
-    print('The calculated dt is', dt_check, 'm')
+    print 'The calculated dt is', dt_check, 'm'
 
     #Go to corner A
     goto_position(LocationGlobalRelative(y1[0,0], y1[1,0], search_altitude))
-
+    print "Reached A"
     #Go to corner B
     goto_position(LocationGlobalRelative(y2[0,0], y2[1,0], search_altitude))
-
+    print "Reached B"
     side = 1
     for i in range(1, Nt):
         if side is 1:
@@ -123,7 +123,8 @@ def coarse_search(A, B, C, D, dt, search_altitude):
             goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
             goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
             side = 1
-
+        print 'Starting new iteration! Current iteration', 'i = ',i, ' Side = ',side 
+  
     vehicle.mode = VehicleMode("RTL")
 
 #START CODE FROM HERE ===============================================================================================================
