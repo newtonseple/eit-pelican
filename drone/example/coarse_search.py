@@ -114,3 +114,6 @@ def coarse_search(A, B, C, D, dt, search_altitude):
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
 coarse_search([63.41209483064148, 10.408899100524877], [63.41209483064148, 10.40934434722135], [63.412327722265836, 10.408899100524877], [63.412327722265836, 10.40934434722135], 1, 3)
+
+			
+			
