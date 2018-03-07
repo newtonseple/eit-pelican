@@ -3,7 +3,6 @@ import dronekit
 from numpy import linspace, multiply
 
 # Connect to the Vehicle
-print 'Connecting to vehicle on: %s' % connection_string
 vehicle = connect(connection_string, wait_ready=True)
 
 
@@ -57,53 +56,53 @@ def get_distance_metres(aLocation1, aLocation2):
 
 def goto_position(position):
 
-	# Send drone to position
+# Send drone to position
 	vehicle.simple_goto(position)
 
-	#While the drone is flying to new position, wait
+#While the drone is flying to new position, wait
 	while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
-		print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
-	    "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
-	    time.sleep(1)
-	print "Reaced target location"
+    print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
+	    		"  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
+    time.sleep(1)
+print "Reaced target location"
 
 def coarse_search(A, B, C, D, dt, search_altitude)
 
-	#Define the grid 
+#Define the grid
 	L1 = get_distance_metres(A,B)
-	L2 = get_distance_metres(A,D)
+    L2 = get_distance_metres(A,D)
 
-	Nt = L2/dt + 1
-	Nt = int(math.ceil(Nt))
-	t = numpy.linspace(0,L2,num=Nt)
-	y1= numpy.zeros((2, Nt))
-	y2 = y1
+    Nt = L2/dt + 1
+    Nt = int(math.ceil(Nt))
+    t = numpy.linspace(0,L2,num=Nt)
+    y1= numpy.zeros((2, Nt))
+    y2 = y1
 
-	for i in range(0, Nt-1):
-	    y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
-	    y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
-	    y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
-	    y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
+    for i in range(0, Nt-1):
+    y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
+    y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
+    y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
+    y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
 
-	dt_check = L2/(Nt-1)
-	print('The calculated dt is', dt_check, 'm')
+    dt_check = L2/(Nt-1)
+    print('The calculated dt is', dt_check, 'm')
 
-	#Go to corner A
+    #Go to corner A
 	goto_position(LocationGlobalRelative(y1[0,0], y1[1,0], search_altitude))
 
-	#Go to corner B
+    #Go to corner B
 	goto_position(LocationGlobalRelative(y2[0,0], y2[1,0], search_altitude))
 
-	side = 1
-	for i in range(1, Nt):
-		if side is 1:
-			goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
-			goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
-			side = 0
-		elif side is 0:
-			goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
-			goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
-			side = 1
+    side = 1
+    for i in range(1, Nt):
+        if side is 1:
+        goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
+            goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
+            side = 0
+        elif side is 0:
+            goto_position(LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
+            goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
+            side = 1
 
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
