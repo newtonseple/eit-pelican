@@ -133,4 +133,6 @@ def coarse_search(A, B, C, D, dt, search_altitude):
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
+vehicle.airspeed = 4
+print 'Set target air speed %2.f',vehicle.airspeed
 coarse_search([63.41209483064148, 10.408899100524877], [63.41209483064148, 10.40934434722135], [63.412327722265836, 10.40934434722135], [63.412327722265836, 10.408899100524877], 2, 3)
