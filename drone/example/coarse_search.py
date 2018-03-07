@@ -102,8 +102,8 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     y2 = y1
 
     for i in range(0, Nt):
-        y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
-        y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
+        y1[0, i] = A[0] + t[i]*(D[0]-A[0])/L2
+        y1[1, i] = A[1] + t[i]*(D[1]-A[1])/L2
         y2[0, i] = B[0] + t[i]*(C[0]-B[0])/L2
         y2[1, i] = B[1] + t[i]*(C[1]-B[1])/L2
     print y1
