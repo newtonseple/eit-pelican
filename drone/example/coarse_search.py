@@ -1,6 +1,6 @@
 import math
 import dronekit
-from numpy import linspace, multiply
+import numpy
 
 # Connect to the Vehicle
 print 'Connecting to vehicle on: %s' % connection_string
@@ -105,6 +105,10 @@ def coarse_search(A, B, C, D, dt, search_altitude)
 			goto_position(LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
 			side = 1
 
+			
+			
+	#Return to base when search is complete
+	vehicle.mode = VehicleMode("RTL")
 #START CODE FROM HERE ===============================================================================================================
 # Arm drone and take off to specified altitute [meters above take off position]
 arm_and_takeoff(10)
