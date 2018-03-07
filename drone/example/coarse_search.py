@@ -85,12 +85,12 @@ print "Reaced target location"
 def coarse_search(A, B, C, D, dt, search_altitude):
 
 #Define the grid
-    A = LocationGlobalRelative(A[0], A[1], search_altitude)
-    B = LocationGlobalRelative(B[0], B[1], search_altitude)
-    C = LocationGlobalRelative(C[0], C[1], search_altitude)
-    D = LocationGlobalRelative(D[0], D[1], search_altitude)
-    L1 = get_distance_metres(A, B)
-    L2 = get_distance_metres(A, D)
+    A1 = LocationGlobalRelative(A[0], A[1], search_altitude)
+    B1 = LocationGlobalRelative(B[0], B[1], search_altitude)
+    C1 = LocationGlobalRelative(C[0], C[1], search_altitude)
+    D1 = LocationGlobalRelative(D[0], D[1], search_altitude)
+    L1 = get_distance_metres(A1, B1)
+    L2 = get_distance_metres(A1, D1)
 
     Nt = L2/dt + 1
     Nt = int(math.ceil(Nt))
@@ -99,10 +99,10 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     y2 = y1
 
     for i in range(0, Nt-1):
-      y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
-      y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
-      y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
-      y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
+        y1[0, i] = A[0] + t[i]*(B[0]-A[0])/L2
+        y1[1, i] = A[1] + t[i]*(B[1]-A[1])/L2
+        y2[0, i] = C[0] + t[i]*(C[0]-B[0])/L2
+        y2[1, i] = C[1] + t[i]*(C[1]-B[1])/L2
 
     dt_check = L2/(Nt-1)
     print('The calculated dt is', dt_check, 'm')
