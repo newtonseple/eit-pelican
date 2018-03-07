@@ -76,7 +76,7 @@ def goto_position(position):
     vehicle.simple_goto(position)
 
 #While the drone is flying to new position, wait
-    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.1:
+    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.3:
             print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
         "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
             time.sleep(1)
