@@ -94,10 +94,10 @@ def coarse_search(A, B, C, D, dt, search_altitude):
     print('The calculated dt is', dt_check, 'm')
 
     #Go to corner A
-	goto_position(LocationGlobalRelative(y1[0,0], y1[1,0], search_altitude))
+    goto_position(LocationGlobalRelative(y1[0,0], y1[1,0], search_altitude))
 
     #Go to corner B
-	goto_position(LocationGlobalRelative(y2[0,0], y2[1,0], search_altitude))
+    goto_position(LocationGlobalRelative(y2[0,0], y2[1,0], search_altitude))
 
     side = 1
     for i in range(1, Nt):
