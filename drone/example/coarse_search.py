@@ -1,5 +1,5 @@
 import math
-import dronekit
+from dronekit import connect, LocationGlobalRelative, VehicleMode
 import numpy
 import time
 
