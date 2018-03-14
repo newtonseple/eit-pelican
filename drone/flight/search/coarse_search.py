@@ -60,6 +60,7 @@ class CoarseSearch(threading.Thread):
                 target = next(targets)
                 self.vehicle.simple_goto(target)
 
+            #TODO: remove this, not needed.. if you do, also remember to comment out printouts, as they will spam you down
             time.sleep(1)
 
 
