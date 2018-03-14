@@ -1,6 +1,6 @@
 import argparse
 import threading
-from flight import setup, helper
+from flight import setup
 from flight.search import coarse_search
 
 import time
@@ -43,10 +43,10 @@ def start_search(vehicle, area):
 
     flightThread.start()
 
-    while True:
-        print vehicle.location.global_relative_frame.alt
-        print "hallo"
-        time.sleep(1)
+    # while True:
+    #     print vehicle.location.global_relative_frame.alt
+    #     print "hallo"
+    #     time.sleep(1)
 
 
 if __name__ == "__main__":
