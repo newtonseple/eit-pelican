@@ -3,6 +3,8 @@ import threading
 from flight import setup, helper
 from flight.search import coarse_search
 
+import time
+
 DRONE_CON_STRING = "0.0.0.0:14550"
 AIRSPEED = 4
 SEARCH_ALTITUDE = 10
@@ -37,8 +39,14 @@ def start_search(vehicle, area):
 
     flightThread = threading.Thread(target=coarse_search.start, args=(vehicle, area, SEARCH_ALTITUDE))
 
+    #flightThread.daemon = True
+
     flightThread.start()
-    print "hello"
+
+    while True:
+        print vehicle.location.global_relative_frame.alt
+        print "hallo"
+        time.sleep(1)
 
 
 if __name__ == "__main__":
