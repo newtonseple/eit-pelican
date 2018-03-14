@@ -1,4 +1,5 @@
-import argparse  
+import argparse
+import threading
 from flight import setup, helper
 from flight.search import coarse_search
 
@@ -11,21 +12,17 @@ def main():
     parser = argparse.ArgumentParser(description='Simulator/drone and search-area')
     parser.add_argument('--device', help="simulator or drone, default is simulator")
     parser.add_argument('--area', nargs='+',
-                        default=[63.41155685054248, 10.408640161710764,
-                                 63.41155685054248, 10.408996895509745,
-                                 63.41186057535474, 10.408996895509745,
-                                 63.41186057535474, 10.408640161710764
-                            ],
+                        default=[63.41155685054248, 10.408640161710764, 63.41155685054248, 10.408996895509745,
+                                 63.41186057535474, 10.408996895509745, 63.41186057535474, 10.408640161710764],
                         type=float, help="list of coords, A,B,C,D")
     args = parser.parse_args()
 
     con_string = DRONE_CON_STRING if args.device == "drone" else None
-    area = helper.coords_to_area(args.area)
 
     # Setup and start drone
     vehicle = start_drone(con_string)
 
-    start_search(vehicle, area)
+    start_search(vehicle, args.area)
 
 
 def start_drone(con_string):
@@ -35,10 +32,13 @@ def start_drone(con_string):
     setup.arm_and_takeoff(vehicle, SEARCH_ALTITUDE)
     return vehicle
 
-def start_search(vehicle, area):
-    coarse_search.start(vehicle, area, SEARCH_ALTITUDE)
-    return 1
 
+def start_search(vehicle, area):
+
+    flightThread = threading.Thread(target=coarse_search.start, args=(vehicle, area, SEARCH_ALTITUDE))
+
+    flightThread.start()
+    print "hello"
 
 
 if __name__ == "__main__":

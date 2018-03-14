@@ -1,4 +1,4 @@
-from ..helper import get_distance_metres
+from ..helper import get_distance_metres, coords_to_area
 from dronekit import LocationGlobalRelative, VehicleMode
 import numpy
 import math
@@ -6,7 +6,9 @@ import time
 
 GRANULARITY = 2
 
-def start(vehicle, area, search_altitude):
+def start(vehicle, area_coords, search_altitude):
+
+    area = coords_to_area(area_coords)
 
     A = area["A"]
     B = area["B"]

@@ -6,7 +6,7 @@ def connect_to_drone(connection_string):
     #Simulator
     if not connection_string:
         import dronekit_sitl
-        sitl = dronekit_sitl.start_default()
+        sitl = dronekit_sitl.start_default(lat=63.411976, lon=10.408972)
         connection_string = sitl.connection_string()
 
     return connect(connection_string, wait_ready=True)
