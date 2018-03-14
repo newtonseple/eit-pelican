@@ -1,10 +1,17 @@
 import math
+from dronekit import LocationGlobalRelative as Pos
 
-def coords_to_area(coords):
-    return {"A": (coords[0], coords[1]),
-            "B": (coords[2], coords[3]),
-            "C": (coords[4], coords[5]),
-            "D": (coords[6], coords[7]) }
+# def generate_area(coords, alt):
+#     return {"A": Pos(coords[0], coords[1], alt),
+#             "B": Pos(coords[2], coords[3], alt),
+#             "C": Pos(coords[4], coords[5], alt),
+#             "D": Pos(coords[6], coords[7], alt) }
+
+def generate_area(coords, alt):
+    return (Pos(coords[0], coords[1], alt),
+            Pos(coords[2], coords[3], alt),
+            Pos(coords[4], coords[5], alt),
+            Pos(coords[6], coords[7], alt) )
 
 def get_distance_metres(aLocation1, aLocation2):
     """

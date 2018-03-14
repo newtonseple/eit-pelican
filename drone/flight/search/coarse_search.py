@@ -1,77 +1,70 @@
-from ..helper import get_distance_metres, coords_to_area
-from dronekit import LocationGlobalRelative, VehicleMode
+from ..helper import get_distance_metres, generate_area
+from dronekit import LocationGlobalRelative as Pos, VehicleMode
+import threading
 import numpy
 import math
 import time
+from itertools import cycle
 
 GRANULARITY = 2
+TOLERANCE = 0.7
 
-def start(vehicle, area_coords, search_altitude):
+class CoarseSearch(threading.Thread):
 
-    area = coords_to_area(area_coords)
+    def __init__(self, vehicle, area_coords, search_altitude):
+        super(CoarseSearch, self).__init__()
+        self._stop_event = threading.Event()
+        self.vehicle = vehicle
 
-    A = area["A"]
-    B = area["B"]
-    C = area["C"]
-    D = area["D"]
+        dt = GRANULARITY
 
-    dt = GRANULARITY
+        #Generate search pattern
+        A,B,C,D = generate_area(area_coords, search_altitude)
+        length = get_distance_metres(A, D)
 
-    #Define the grid
-    A1 = LocationGlobalRelative(A[0], A[1], search_altitude)
-    B1 = LocationGlobalRelative(B[0], B[1], search_altitude)
-    C1 = LocationGlobalRelative(C[0], C[1], search_altitude)
-    D1 = LocationGlobalRelative(D[0], D[1], search_altitude)
-    L1 = get_distance_metres(A1, B1)
-    L2 = get_distance_metres(A1, D1)
-    print 'L1 = ',L1
-    print 'L2 = ',L2
-    
-    Nt = L2/dt + 1
-    Nt = int(math.ceil(Nt))
-    t = numpy.linspace(0,L2,num=Nt)
-    y1= numpy.zeros((2, Nt))
-    y2= numpy.zeros((2, Nt))
+        num_steps = math.ceil(length/dt + 1)
+        steps = numpy.linspace(0, length, num=num_steps)
 
-    for i in range(0, Nt):
-        y1[0, i] = A[0] + t[i]*(D[0]-A[0])/L2
-        y1[1, i] = A[1] + t[i]*(D[1]-A[1])/L2
-        y2[0, i] = B[0] + t[i]*(C[0]-B[0])/L2
-        y2[1, i] = B[1] + t[i]*(C[1]-B[1])/L2
-    dt_check = L2/(Nt-1)
-    print 'The calculated dt is', dt_check, 'm'
+        left_lat_step = (D.lat-A.lat)/length
+        left_lon_step = (D.lon-A.lon)/length
+        left = [Pos(A.lat + t*left_lat_step, A.lon + t*left_lon_step, search_altitude) for t in steps]
 
-    #Go to corner A
-    goto_position(vehicle, LocationGlobalRelative(y1[0,0], y1[1,0], search_altitude))
-    print "Reached A"
-    #Go to corner B
-    goto_position(vehicle, LocationGlobalRelative(y2[0,0], y2[1,0], search_altitude))
-    print "Reached B"
-    side = 1
-    for i in range(1, Nt):
-        if side is 1:
-            goto_position(vehicle, LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
-            goto_position(vehicle, LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
-            side = 0
-        elif side is 0:
-            goto_position(vehicle, LocationGlobalRelative(y1[0, i], y1[1, i], search_altitude))
-            goto_position(vehicle, LocationGlobalRelative(y2[0, i], y2[1, i], search_altitude))
-            side = 1
-        print 'Starting new iteration! Current iteration', 'i = ',i, ' Side = ',side 
-  
-    vehicle.mode = VehicleMode("RTL")
-    print 'Returning home. Mission not completed'
-    vehicle.close()
+        right_lat_step = (C.lat-B.lat)/length
+        right_lon_step = (C.lon-B.lon)/length
+        right = [Pos(B.lat + t*right_lat_step, B.lon + t*right_lon_step, search_altitude) for t in steps]
+
+        self.search_pattern = []
+        # Re-arrange to right-angle zig-zag pattern
+        is_left = True
+        for l,r in zip(left, right):
+            if is_left:
+                self.search_pattern.extend([l,r])
+            else:
+               self.search_pattern.extend([r,l])
+            is_left = not is_left
 
 
-def goto_position(vehicle, position):
+    def run(self):
 
-# Send drone to position
-    vehicle.simple_goto(position)
+        targets = cycle(self.search_pattern)
+        target = next(targets)
 
-#While the drone is flying to new position, wait
-    while get_distance_metres(vehicle.location.global_relative_frame, position) >= 0.5:
-            print "Flying to specified location. Current altitude: ", vehicle.location.global_relative_frame.alt, "m",\
-        "  Lateral distance to target: ", "%.2f" % get_distance_metres(vehicle.location.global_relative_frame, position), "m"
+        self.vehicle.simple_goto(target)
+
+        while not self.stopped():
+            print "Flying to specified location. Current altitude: ", self.vehicle.location.global_relative_frame.alt, "m",\
+            "  Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
+
+            if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
+                print ">>> Target reached!"
+                target = next(targets)
+                self.vehicle.simple_goto(target)
+
             time.sleep(1)
-    print "Reaced target location"
+
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
