@@ -1,8 +1,7 @@
-from ..helper import get_distance_metres, generate_area
 from dronekit import LocationGlobalRelative as Pos, VehicleMode
+from helper import get_distance_metres, generate_area
 import threading
 import numpy
-import math
 import time
 from itertools import cycle
 
@@ -22,7 +21,7 @@ class CoarseSearch(threading.Thread):
         A,B,C,D = generate_area(area_coords, search_altitude)
         length = get_distance_metres(A, D)
 
-        num_steps = math.ceil(length/dt + 1)
+        num_steps = int(numpy.ceil(length/dt + 1))
         steps = numpy.linspace(0, length, num=num_steps)
 
         left_lat_step = (D.lat-A.lat)/length
@@ -52,8 +51,7 @@ class CoarseSearch(threading.Thread):
         self.vehicle.simple_goto(target)
 
         while not self.stopped():
-            print "Flying to specified location. Current altitude: ", self.vehicle.location.global_relative_frame.alt, "m",\
-            "  Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
+            print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
 
             if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
                 print ">>> Target reached!"
