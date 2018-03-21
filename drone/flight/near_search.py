@@ -33,21 +33,18 @@ class NearSearch(threading.Thread):
     
     def continue_straight(self):
         # Look for next key_point, the point of contact-loss continuing in the same direction
-
         cont = True
         while cont:
             while cont and not self.signal_queue.empty():
-
                 signal = self.signal_queue.get()
-
                 if not signal[0]:
                     self.key_points.append(self.vehicle_location())
                     cont = False
 
+
     def center_on_line(self):
 
         print "Center on line"
-
         point_A = self.key_points[0]
         point_B = self.key_points[1]
         
@@ -70,10 +67,8 @@ class NearSearch(threading.Thread):
         point_C = self.key_points[2]
 
         bound = 50
-
         upper_lat = point_C.lat + self.y_lat_step * bound 
         upper_lon = point_C.lon + self.y_lon_step * bound 
-
         lower_lat = point_C.lat + self.y_lat_step * (-bound)
         lower_lon = point_C.lon + self.y_lon_step * (-bound) 
 
