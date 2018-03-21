@@ -7,8 +7,7 @@ import time
 from Queue import Queue
 
 DRONE_CON_STRING = "0.0.0.0:14550"
-AIRSPEED = 4
-SEARCH_ALTITUDE = 10
+TAKEOFF_ALTITUDE = 10.0
 
 def main():
     # Parse arguments
@@ -25,22 +24,62 @@ def main():
     # Setup and start drone
     vehicle = setup.connect_to_drone(con_string) #given "None" the simulator is used.
 
-    vehicle.airspeed = AIRSPEED
-    setup.arm_and_takeoff(vehicle, SEARCH_ALTITUDE)
+    setup.arm_and_takeoff(vehicle, TAKEOFF_ALTITUDE)
 
     start_search(vehicle, args.area)
 
 
 def start_search(vehicle, area):
 
-    #TODO: Pass this to signal-processor, and to the instances wanting to consume it as well (one at a time!)
     signal_queue = Queue()
+    # TODO: start signal processing here with signal queue
+    # insted of the test feeder, obviously
+    t = threading.Thread(target=test_signal_feeder, args=(signal_queue, ))
+    t.start()
 
-    cs = CoarseSearch(vehicle, area, SEARCH_ALTITUDE)
+
+    coarse_mode(vehicle, area, signal_queue)
+
+
+def coarse_mode(vehicle, area, signal_queue):
+
+    print "Start coarse search"
+    cs = CoarseSearch(vehicle, area)
+    cs.daemon = True
     cs.start()
 
-    time.sleep(20)
+    # Coarse search until we get a signal
+    while not signal_queue.get(block=True)[0]:
+        pass
+
     cs.stop()
+    near_mode(vehicle, area, signal_queue)
+
+
+def near_mode(vehicle, area, signal_queue):
+
+    print "Start near search"
+    ns = NearSearch(vehicle, area, signal_queue)
+    ns.start()
+
+    ns.join()
+
+
+# Just a test
+def test_signal_feeder(signal_queue):
+
+    time.sleep(7)
+    signal_queue.put((True, "normal", 0))
+    time.sleep(7)
+    signal_queue.put((False, "no_signal", 0))
+    time.sleep(3)
+    signal_queue.put((True, "normal", 0))
+    time.sleep(7)
+    signal_queue.put((False, "no_signal", 0))
+    time.sleep(3)
+    signal_queue.put((True, "normal", 0))
+    time.sleep(7)
+    signal_queue.put((False, "no_signal", 0))
 
 
 
