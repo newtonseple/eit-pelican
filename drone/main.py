@@ -3,6 +3,7 @@ import threading
 from flight import setup
 from flight.coarse_search import CoarseSearch
 import time
+from Queue import Queue
 
 DRONE_CON_STRING = "0.0.0.0:14550"
 AIRSPEED = 4
@@ -21,28 +22,27 @@ def main():
     con_string = DRONE_CON_STRING if args.device == "drone" else None
 
     # Setup and start drone
-    vehicle = start_drone(con_string)
-
-    start_search(vehicle, args.area)
-
-
-def start_drone(con_string):
     vehicle = setup.connect_to_drone(con_string) #given "None" the simulator is used.
 
     vehicle.airspeed = AIRSPEED
     setup.arm_and_takeoff(vehicle, SEARCH_ALTITUDE)
-    return vehicle
+
+    start_search(vehicle, args.area)
 
 
 def start_search(vehicle, area):
 
-    cs = CoarseSearch(vehicle, area, SEARCH_ALTITUDE)
+    #TODO: Pass this to signal-processor, and to the instances wanting to consume it as well (one at a time!)
+    signal_queue = Queue()
 
+    cs = CoarseSearch(vehicle, area, SEARCH_ALTITUDE)
     cs.start()
 
     time.sleep(20)
-
     cs.stop()
+
+
+    
 
 
 if __name__ == "__main__":

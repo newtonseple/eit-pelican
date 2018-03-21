@@ -1,4 +1,4 @@
-from dronekit import LocationGlobalRelative as Pos, VehicleMode
+from dronekit import LocationGlobalRelative as Pos
 from helper import get_distance_metres, generate_area
 import threading
 import numpy
