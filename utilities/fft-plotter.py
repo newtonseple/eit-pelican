@@ -11,8 +11,11 @@ Receives serial lines with FFT bins and plots the result in real time.
 import serial
 
 import numpy as np
-import pyqtgraph as pg
-from pyqtgraph.Qt import QtGui, QtCore
+#import pyqtgraph as pg
+#from pyqtgraph.Qt import QtGui, QtCore
+
+from threading import Thread
+from queue import Queue
 
 class Barryvox:
     # TODO unify state in a single model.
@@ -56,16 +59,19 @@ class Barryvox:
         if bin in self.bins_distance:
             self.distance = self.bins_distance[bin]
             
-        print("Status: " + str(self.get_status()))
+        #print("Status: " + str(self.get_status()))
     
     def check_serial(self):
         line = self.ser.readline()
-        self.spectrum = np.array(line.split(), dtype=np.float32)
+        try: # in case of parse error
+            self.spectrum = np.array(line.split(), dtype=np.float32)
+        except:
+            print("Barryvox:parse error")
         if np.max(self.spectrum) > 0.05:
             self.process_signal(np.argmax(self.spectrum),np.max(self.spectrum))
             self.timer = 0; # Reset timer for no signal
             #print (str(np.argmax(nums)) + "\t" +  str(np.max(nums)))
-        elif self.timer > 2.0 / 0.020: # Timeout, go to nosignal
+        elif self.timer > 2.0 / 0.020: # Timeout 2 seconds, go to nosignal
             self.set_state("nosignal")
         else:
             self.timer += 1
@@ -73,27 +79,47 @@ class Barryvox:
         while(1):
             self.check_serial()
     def get_status(self):
-        # returns (bool signal, int distance)
+        # returns (bool signal, string state, int distance)
         if self.state in ("normal", "close", "ahead", "turn"):
             signal = True
             distance = self.distance
         else:
             signal = False
             distance = -1
-        return (signal, distance)
+        return (signal, self.state, distance)
 
+class BarryvoxThread:
+    def _spin(self):
+        self.barryvox = Barryvox(self.tty,self.baud)
+        last_status = None
+        while(1):
+            #print("BarryvoxThread:spun")
+            self.barryvox.check_serial()
+            status = self.barryvox.get_status()
+            if status != last_status:
+                #print("STATE CHANGE:",last_status,status)
+                self.queue.put(status)
+            last_status = status
 
-barryvox = Barryvox("COM5",115200)
+    def __init__(self, tty, baud):
+        self.tty = tty
+        self.baud = baud
+        self.queue = Queue()
+        self.thread = Thread(target=self._spin)
+        self.thread.start()
 
-pointsY0 = [];
-pwnd = pg.plot();
-curveY0 = pwnd.plot(pen="y", antialias=True);
-
-while(1):
-    QtGui.QApplication.processEvents();
-    barryvox.check_serial()
-    curveY0.setData(barryvox.spectrum);
-            
+if __name__ == "__main__":
+    #barryvox = Barryvox("COM5",115200)
+    barryvoxThread = BarryvoxThread("COM5",115200)
+    print("main:BarryvoxThread started")
+    #ointsY0 = [];
+    #pwnd = pg.plot();
+    #curveY0 = pwnd.plot(pen="y", antialias=True);
+    
+    while(1):
+        #QtGui.QApplication.processEvents();
+        #curveY0.setData(barryvox.spectrum);
+        print(barryvoxThread.queue.get())
 
 # snu 6bin
 # vanlig 9bin (0.1amp siden, 0.3amp vanlig)
