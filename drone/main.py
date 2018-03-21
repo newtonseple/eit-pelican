@@ -2,6 +2,7 @@ import argparse
 import threading
 from flight import setup
 from flight.coarse_search import CoarseSearch
+from flight.near_search import NearSearch
 import time
 from Queue import Queue
 
@@ -41,8 +42,6 @@ def start_search(vehicle, area):
     time.sleep(20)
     cs.stop()
 
-
-    
 
 
 if __name__ == "__main__":
