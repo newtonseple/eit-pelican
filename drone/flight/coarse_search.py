@@ -50,7 +50,7 @@ class CoarseSearch(threading.Thread):
 
         self.vehicle.simple_goto(target)
 
-        while not self.stopped():
+        while keep_running():
             print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
 
             if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
@@ -65,5 +65,5 @@ class CoarseSearch(threading.Thread):
     def stop(self):
         self._stop_event.set()
 
-    def stopped(self):
-        return self._stop_event.is_set()
+    def keep_running(self):
+        return not self._stop_event.is_set()
