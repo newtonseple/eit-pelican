@@ -15,7 +15,7 @@ import numpy as np
 #from pyqtgraph.Qt import QtGui, QtCore
 
 from threading import Thread
-from queue import Queue
+from Queue import Queue
 
 class Barryvox:
     # TODO unify state in a single model.
