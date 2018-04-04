@@ -15,7 +15,7 @@ import numpy as np
 #from pyqtgraph.Qt import QtGui, QtCore
 
 from threading import Thread
-from queue import Queue
+from Queue import Queue
 
 class Barryvox:
     # TODO unify state in a single model.
@@ -26,8 +26,8 @@ class Barryvox:
             13:"close",
             14:"close",
             15:"close",
-            16:"close",
-            17:"close",
+            #16:"close",
+            #17:"close",
             20:"ahead",
             #12:"error",
             }
@@ -38,8 +38,8 @@ class Barryvox:
             13:4,
             14:3,
             15:2,
-            16:1,
-            17:0,
+            #16:1,
+            #17:0,
             20:7,
             #12:"error",
             }
@@ -86,7 +86,7 @@ class Barryvox:
             distance = self.distance
         else:
             signal = False
-            distance = -1
+            distance = 9
         return (signal, self.state, distance)
 
 class BarryvoxThread(Thread):
