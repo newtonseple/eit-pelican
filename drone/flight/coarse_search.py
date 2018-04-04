@@ -5,32 +5,34 @@ import numpy
 import time
 from itertools import cycle
 
-GRANULARITY = 2
+GRANULARITY = 2.0
 TOLERANCE = 0.7
+AIRSPEED = 4.0
+SEARCH_ALTITUDE = 10.0
 
 class CoarseSearch(threading.Thread):
 
-    def __init__(self, vehicle, area_coords, search_altitude):
+    def __init__(self, vehicle, area_coords):
         super(CoarseSearch, self).__init__()
         self._stop_event = threading.Event()
         self.vehicle = vehicle
 
+        self.vehicle.airspeed = AIRSPEED
+
         dt = GRANULARITY
 
         #Generate search pattern
-        A,B,C,D = generate_area(area_coords, search_altitude)
+        A,B,C,D = generate_area(area_coords, SEARCH_ALTITUDE)
         length = get_distance_metres(A, D)
 
         num_steps = int(numpy.ceil(length/dt + 1))
         steps = numpy.linspace(0, length, num=num_steps)
 
-        left_lat_step = (D.lat-A.lat)/length
-        left_lon_step = (D.lon-A.lon)/length
-        left = [Pos(A.lat + t*left_lat_step, A.lon + t*left_lon_step, search_altitude) for t in steps]
+        y_lat_step = (D.lat-A.lat)/length
+        y_lon_step = (D.lon-A.lon)/length
 
-        right_lat_step = (C.lat-B.lat)/length
-        right_lon_step = (C.lon-B.lon)/length
-        right = [Pos(B.lat + t*right_lat_step, B.lon + t*right_lon_step, search_altitude) for t in steps]
+        left = [Pos(A.lat + t*y_lat_step, A.lon + t*y_lon_step, SEARCH_ALTITUDE) for t in steps]
+        right = [Pos(B.lat + t*y_lat_step, B.lon + t*y_lon_step, SEARCH_ALTITUDE) for t in steps]
 
         self.search_pattern = []
         # Re-arrange to right-angle zig-zag pattern
@@ -50,7 +52,7 @@ class CoarseSearch(threading.Thread):
 
         self.vehicle.simple_goto(target)
 
-        while keep_running():
+        while self.keep_running():
             print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
 
             if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
