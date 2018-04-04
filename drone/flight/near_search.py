@@ -98,5 +98,7 @@ class NearSearch(threading.Thread):
         print ">>>> PERSON LOCATED:"
         print ">>>>  lat:",lat,"  lon:",lon
 
+        # self.vehicle.mode = VehicleMode("LAND")
+
     def vehicle_location(self):
         return self.vehicle.location.global_relative_frame
