@@ -5,7 +5,7 @@ import json
 
 API_SEARCH_AREA = "/search_area="
 
-class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class ControlRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
 
     	if API_SEARCH_AREA in self.path: #hack an API endpoint by extending SimpleHTTPServer
@@ -23,7 +23,7 @@ class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         return SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
-Handler = MyRequestHandler
+Handler = ControlRequestHandler
 server = SocketServer.TCPServer(('0.0.0.0', 3000), Handler)
 
 server.serve_forever()
