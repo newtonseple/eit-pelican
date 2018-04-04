@@ -1,10 +1,11 @@
 import argparse
 import threading
+import time
+from Queue import Queue
 from flight import setup
 from flight.coarse_search import CoarseSearch
 from flight.near_search import NearSearch
-import time
-from Queue import Queue
+from barryvox import BarryvoxThread
 
 DRONE_CON_STRING = "0.0.0.0:14550"
 TAKEOFF_ALTITUDE = 10.0
@@ -33,7 +34,8 @@ def start_search(vehicle, area):
 
     signal_queue = Queue()
 
-    barryvox = BarryVox(signal_queue)
+    barryvox = BarryvoxThread(signal_queue)
+    barryvox.daemon = True
     barryvox.start()
 
     coarse_mode(vehicle, area, signal_queue)
