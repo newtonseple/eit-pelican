@@ -86,7 +86,7 @@ class Barryvox:
             distance = self.distance
         else:
             signal = False
-            distance = -1
+            distance = 9
         return (signal, self.state, distance)
 
 class BarryvoxThread(Thread):
