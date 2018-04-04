@@ -26,8 +26,8 @@ class Barryvox:
             13:"close",
             14:"close",
             15:"close",
-            16:"close",
-            17:"close",
+            #16:"close",
+            #17:"close",
             20:"ahead",
             #12:"error",
             }
@@ -38,8 +38,8 @@ class Barryvox:
             13:4,
             14:3,
             15:2,
-            16:1,
-            17:0,
+            #16:1,
+            #17:0,
             20:7,
             #12:"error",
             }
