@@ -51,19 +51,19 @@ class NearSearch(threading.Thread):
         
         lat = (point_A.lat + point_B.lat) / 2.0
         lon = (point_A.lon + point_B.lon) / 2.0
-        target = Pos(lat, lon, SEARCH_ALTITUDE)
+        center = Pos(lat, lon, SEARCH_ALTITUDE)
 
-        self.vehicle.simple_goto(target)
+        self.vehicle.simple_goto(center)
 
-        while get_distance_metres(self.vehicle_location(), target) > TOLERANCE:
+        while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
             pass
 
         print ">> Centered on line"
         self.key_points.append(self.vehicle_location())
 
-        self.go_perpendicular()
+        self.go_perpendicular(center)
 
-    def go_perpendicular(self):
+    def go_perpendicular(self, center):
 
         point_C = self.key_points[2]
 
@@ -73,11 +73,22 @@ class NearSearch(threading.Thread):
         lower_lat = point_C.lat + self.y_lat_step * (-bound)
         lower_lon = point_C.lon + self.y_lon_step * (-bound) 
 
-        targets = [Pos(upper_lat, upper_lon, SEARCH_ALTITUDE), Pos(lower_lat, lower_lon, SEARCH_ALTITUDE)]
+        t1, t2 = (Pos(upper_lat, upper_lon, SEARCH_ALTITUDE), Pos(lower_lat, lower_lon, SEARCH_ALTITUDE))
 
-        for t in targets:
-            self.vehicle.simple_goto(t)
-            self.continue_straight()
+        print("Go to top")
+        self.vehicle.simple_goto(t1)
+        self.continue_straight()
+        print("Reached top")
+        
+        print("Go back to center")
+        self.vehicle.simple_goto(center)
+        while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
+            pass
+        print("Reached center")
+
+        print("Go to bottom")
+        self.vehicle.simple_goto(t2)
+        self.continue_straight()
 
         point_A, point_B = self.key_points[-2:]
 
