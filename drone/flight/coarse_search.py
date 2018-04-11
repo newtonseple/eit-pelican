@@ -7,7 +7,7 @@ from itertools import cycle
 
 GRANULARITY = 2.0
 TOLERANCE = 0.7
-AIRSPEED = 4.0
+AIRSPEED = 2.0
 SEARCH_ALTITUDE = 3.0
 
 class CoarseSearch(threading.Thread):
