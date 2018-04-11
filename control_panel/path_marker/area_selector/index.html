@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pelican search area</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .searchBtn {
+
+      	background-color: #00B16A;
+      	border: 2px solid #00B16A;
+      	border-radius: 3px;
+      	box-shadow: 0 2px 6px rgba(0,0,0,.3);
+      	cursor: pointer;
+      	margin-bottom: 22px;
+      	text-align: center;
+      	margin-top: 20px;
+      }
+
+      .searchBtnTxt {
+      	color: white;
+      	font-weight: bold;
+      	font-family: Roboto,Arial,sans-serif;
+      	font-size: 18px;
+      	line-height: 38px;
+      	padding: 2px;
+      	padding-left: 7px;
+      	padding-right: 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+      var API_SEARCH_AREA = "/search_area=";
+
+      var markers = [];
+      var searchRect = null;
+
+      // function rectangleComplete(rectangle) {
+      //
+      // 	markers.forEach(r => {
+      // 		r.setMap(null);
+      // 	});
+      //
+      // 	markers.push(rectangle);
+      //
+      // 	searchRect = rectangle;
+      // 	console.log(searchRect.bounds);
+      // }
+      //
+      // function CenterControl(controlDiv, map) {
+      //
+      //   // Set CSS for the control border.
+      //   var controlUI = document.createElement('div');
+      //   controlUI.className = "searchBtn";
+      //   controlUI.title = 'Click to start rescue search';
+      //   controlDiv.appendChild(controlUI);
+      //
+      //   // Set CSS for the control interior.
+      //   var controlText = document.createElement('div');
+      //   controlText.className = "searchBtnTxt";
+      //   controlText.innerHTML = 'START SEARCH';
+      //   controlUI.appendChild(controlText);
+      //
+      //   // Setup the click event listeners: simply set the map to Chicago.
+      //   controlUI.addEventListener('click', function() {
+      //   	if (searchRect === null)
+      //   		return alert("Define a search area using the drawing tools");
+      //   	if (confirm("Really start search?")) {
+      //
+      //   		//Generates json and url-encodes it
+		  //     	var data = encodeURIComponent(JSON.stringify(searchRect.bounds));
+		  //     	fetch(API_SEARCH_AREA + data);
+      //   	}
+      //   });
+      // }
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: 63.412020, lng: 10.409457},
+          mapTypeId: 'terrain'
+        });
+
+        var flightPlanCoordinates = [{ "lat": 63.411976, "lng": 10.408971},
+{ "lat": 63.411976, "lng": 10.408971},
+{ "lat": 63.411976, "lng": 10.408971},
+{ "lat": 63.411970, "lng": 10.408968},
+{ "lat": 63.411959, "lng": 10.408961},
+{ "lat": 63.411947, "lng": 10.408951},
+{ "lat": 63.411932, "lng": 10.408937},
+{ "lat": 63.411918, "lng": 10.408925},
+{ "lat": 63.411904, "lng": 10.408913},
+{ "lat": 63.411889, "lng": 10.408901},
+{ "lat": 63.411870, "lng": 10.408886},
+{ "lat": 63.411854, "lng": 10.408874},
+{ "lat": 63.411839, "lng": 10.408862},
+{ "lat": 63.411823, "lng": 10.408849},
+{ "lat": 63.411806, "lng": 10.408837},
+{ "lat": 63.411790, "lng": 10.408824},
+{ "lat": 63.411774, "lng": 10.408811},
+{ "lat": 63.411754, "lng": 10.408796},
+{ "lat": 63.411737, "lng": 10.408783},
+{ "lat": 63.411721, "lng": 10.408770},
+{ "lat": 63.411705, "lng": 10.408758},
+{ "lat": 63.411689, "lng": 10.408746},
+{ "lat": 63.411669, "lng": 10.408730},
+{ "lat": 63.411653, "lng": 10.408717},
+{ "lat": 63.411637, "lng": 10.408705},
+{ "lat": 63.411622, "lng": 10.408693},
+{ "lat": 63.411606, "lng": 10.408680},
+{ "lat": 63.411590, "lng": 10.408668},
+{ "lat": 63.411572, "lng": 10.408653},
+{ "lat": 63.411562, "lng": 10.408644},
+{ "lat": 63.411558, "lng": 10.408641},
+{ "lat": 63.411556, "lng": 10.408641},
+{ "lat": 63.411555, "lng": 10.408653},
+{ "lat": 63.411556, "lng": 10.408676},
+{ "lat": 63.411556, "lng": 10.408710},
+{ "lat": 63.411556, "lng": 10.408739},
+{ "lat": 63.411557, "lng": 10.408770},
+{ "lat": 63.411557, "lng": 10.408803},
+{ "lat": 63.411558, "lng": 10.408838},
+{ "lat": 63.411558, "lng": 10.408874},
+{ "lat": 63.411559, "lng": 10.408921},
+{ "lat": 63.411559, "lng": 10.408957},
+{ "lat": 63.411559, "lng": 10.408986},
+{ "lat": 63.411560, "lng": 10.408997},
+{ "lat": 63.411566, "lng": 10.409002},
+{ "lat": 63.411573, "lng": 10.409004},
+{ "lat": 63.411576, "lng": 10.409003},
+{ "lat": 63.411577, "lng": 10.408986},
+{ "lat": 63.411577, "lng": 10.408960},
+{ "lat": 63.411579, "lng": 10.408925},
+{ "lat": 63.411580, "lng": 10.408903},
+{ "lat": 63.411580, "lng": 10.408872},
+{ "lat": 63.411579, "lng": 10.408830},
+{ "lat": 63.411579, "lng": 10.408795},
+{ "lat": 63.411578, "lng": 10.408758},
+{ "lat": 63.411578, "lng": 10.408712},
+{ "lat": 63.411577, "lng": 10.408683},
+{ "lat": 63.411577, "lng": 10.408648},
+{ "lat": 63.411577, "lng": 10.408638},
+{ "lat": 63.411584, "lng": 10.408634},
+{ "lat": 63.411591, "lng": 10.408633},
+{ "lat": 63.411594, "lng": 10.408634},
+{ "lat": 63.411595, "lng": 10.408653},
+{ "lat": 63.411596, "lng": 10.408679},
+{ "lat": 63.411597, "lng": 10.408705},
+{ "lat": 63.411598, "lng": 10.408735},
+{ "lat": 63.411598, "lng": 10.408766},
+{ "lat": 63.411598, "lng": 10.408808},
+{ "lat": 63.411598, "lng": 10.408844},
+{ "lat": 63.411598, "lng": 10.408880},
+{ "lat": 63.411598, "lng": 10.408917},
+{ "lat": 63.411598, "lng": 10.408954},
+{ "lat": 63.411598, "lng": 10.408985},
+{ "lat": 63.411597, "lng": 10.408997},
+{ "lat": 63.411598, "lng": 10.409004},
+{ "lat": 63.411603, "lng": 10.409007},
+{ "lat": 63.411608, "lng": 10.409007},
+{ "lat": 63.411609, "lng": 10.409003},
+{ "lat": 63.411609, "lng": 10.408983},
+{ "lat": 63.411610, "lng": 10.408949},
+{ "lat": 63.411610, "lng": 10.408920},
+{ "lat": 63.411611, "lng": 10.408890},
+{ "lat": 63.411612, "lng": 10.408859},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825},
+{ "lat": 63.411612, "lng": 10.408825}];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        flightPath.setMap(map);
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2klyfmc9bAT_XPojHTRh15Qq2Pu3Ecq4&libraries=drawing&callback=initMap"
+         async defer></script>
+  </body>
+</html>
