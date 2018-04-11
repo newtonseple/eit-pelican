@@ -103,7 +103,7 @@ class BarryvoxThread(Thread):
                 self.queue.put(status)
             last_status = status
 
-    def __init__(self, queue, tty="COM5", baud=115200):
+    def __init__(self, queue, tty="/dev/serial/by-id/usb-Teensyduino_USB_Serial_2729570-if00", baud=115200):
         super(BarryvoxThread, self).__init__()
         
         self.tty = tty

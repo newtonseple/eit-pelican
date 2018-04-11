@@ -7,6 +7,7 @@ import time
 AIRSPEED = 1.0
 TOLERANCE = 0.7
 SEARCH_ALTITUDE = 3.0
+PERP_BOUND = 50
 
 class NearSearch(threading.Thread):
 
@@ -68,7 +69,7 @@ class NearSearch(threading.Thread):
 
         point_C = self.key_points[2]
 
-        bound = 50
+        bound = PERP_BOUND
         upper_lat = point_C.lat + self.y_lat_step * bound 
         upper_lon = point_C.lon + self.y_lon_step * bound 
         lower_lat = point_C.lat + self.y_lat_step * (-bound)
