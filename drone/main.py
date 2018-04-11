@@ -9,7 +9,7 @@ from flight.near_search import NearSearch
 from barryvox import BarryvoxThread
 
 DRONE_CON_STRING = "0.0.0.0:14550"
-TAKEOFF_ALTITUDE = 10.0
+TAKEOFF_ALTITUDE = 3.0
 
 def main():
     # Parse arguments
