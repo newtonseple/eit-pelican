@@ -6,7 +6,7 @@ import time
 
 AIRSPEED = 1.0
 TOLERANCE = 0.7
-SEARCH_ALTITUDE = 10.0
+SEARCH_ALTITUDE = 3.0
 
 class NearSearch(threading.Thread):
 
