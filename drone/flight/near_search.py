@@ -5,6 +5,7 @@ import numpy
 import time
 
 AIRSPEED = 1.0
+GROUNDSPEED = 1.0
 TOLERANCE = 0.7
 SEARCH_ALTITUDE = 3.0
 PERP_BOUND = 50
@@ -55,7 +56,7 @@ class NearSearch(threading.Thread):
         lon = (point_A.lon + point_B.lon) / 2.0
         center = Pos(lat, lon, SEARCH_ALTITUDE)
 
-        self.vehicle.simple_goto(center, AIRSPEED)
+        self.vehicle.simple_goto(center, groundspeed=GROUNDSPEED)
 
         while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
             pass
@@ -78,18 +79,18 @@ class NearSearch(threading.Thread):
         t1, t2 = (Pos(upper_lat, upper_lon, SEARCH_ALTITUDE), Pos(lower_lat, lower_lon, SEARCH_ALTITUDE))
 
         print("Go to top")
-        self.vehicle.simple_goto(t1, AIRSPEED)
+        self.vehicle.simple_goto(t1, groundspeed=GROUNDSPEED)
         self.continue_straight()
         print("Reached top")
         
         print("Go back to center")
-        self.vehicle.simple_goto(center, AIRSPEED)
+        self.vehicle.simple_goto(center, groundspeed=GROUNDSPEED)
         while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
             pass
         print("Reached center")
 
         print("Go to bottom")
-        self.vehicle.simple_goto(t2, AIRSPEED)
+        self.vehicle.simple_goto(t2, groundspeed=GROUNDSPEED)
         self.continue_straight()
 
         point_A, point_B = self.key_points[-2:]
