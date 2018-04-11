@@ -115,7 +115,7 @@ class BarryvoxThread(Thread):
 if __name__ == "__main__":
     #barryvox = Barryvox("COM5",115200)
     queue = Queue()
-    barryvoxThread = BarryvoxThread(queue,"COM5",115200)
+    barryvoxThread = BarryvoxThread(queue,"/dev/serial/by-id/usb-Teensyduino_USB_Serial_2729570-if00",115200)
     barryvoxThread.daemon = True
     barryvoxThread.start()
 

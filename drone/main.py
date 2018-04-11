@@ -54,7 +54,7 @@ def coarse_mode(vehicle, area, signal_queue):
     cs.start()
 
     # Coarse search until we get a signal
-    # while not signal_queue.get(block=True)[0]:
+    #while not signal_queue.get(block=True)[0]:
     while signal_queue.get(block=True)[2] > 6:
         pass
 

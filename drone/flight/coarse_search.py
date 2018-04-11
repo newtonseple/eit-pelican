@@ -5,7 +5,7 @@ import numpy
 import time
 from itertools import cycle
 
-GRANULARITY = 2.0
+GRANULARITY = 3.0
 TOLERANCE = 0.7
 AIRSPEED = 2.0
 SEARCH_ALTITUDE = 3.0
@@ -50,7 +50,7 @@ class CoarseSearch(threading.Thread):
         targets = cycle(self.search_pattern)
         target = next(targets)
 
-        self.vehicle.simple_goto(target)
+        self.vehicle.simple_goto(target, AIRSPEED)
 
         while self.keep_running():
             print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
@@ -58,7 +58,7 @@ class CoarseSearch(threading.Thread):
             if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
                 print ">>> Target reached!"
                 target = next(targets)
-                self.vehicle.simple_goto(target)
+                self.vehicle.simple_goto(target, AIRSPEED)
 
             #TODO: remove this, not needed.. if you do, also remember to comment out printouts, as they will spam you down
             time.sleep(1)

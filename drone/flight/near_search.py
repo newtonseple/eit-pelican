@@ -39,8 +39,8 @@ class NearSearch(threading.Thread):
             while cont and not self.signal_queue.empty():
                 signal = self.signal_queue.get()
 
-                if not signal[0]:
-                # if signal[2] > 6:
+                #if not signal[0]:
+                if signal[2] > 6:
                     self.key_points.append(self.vehicle_location())
                     cont = False
 
@@ -55,7 +55,7 @@ class NearSearch(threading.Thread):
         lon = (point_A.lon + point_B.lon) / 2.0
         center = Pos(lat, lon, SEARCH_ALTITUDE)
 
-        self.vehicle.simple_goto(center)
+        self.vehicle.simple_goto(center, AIRSPEED)
 
         while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
             pass
@@ -78,18 +78,18 @@ class NearSearch(threading.Thread):
         t1, t2 = (Pos(upper_lat, upper_lon, SEARCH_ALTITUDE), Pos(lower_lat, lower_lon, SEARCH_ALTITUDE))
 
         print("Go to top")
-        self.vehicle.simple_goto(t1)
+        self.vehicle.simple_goto(t1, AIRSPEED)
         self.continue_straight()
         print("Reached top")
         
         print("Go back to center")
-        self.vehicle.simple_goto(center)
+        self.vehicle.simple_goto(center, AIRSPEED)
         while get_distance_metres(self.vehicle_location(), center) > TOLERANCE:
             pass
         print("Reached center")
 
         print("Go to bottom")
-        self.vehicle.simple_goto(t2)
+        self.vehicle.simple_goto(t2, AIRSPEED)
         self.continue_straight()
 
         point_A, point_B = self.key_points[-2:]
