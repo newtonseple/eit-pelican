@@ -79,6 +79,14 @@
         		return alert("Define a search area using the drawing tools");
         	if (confirm("Really start search?")) {
 
+                console.log(searchRect);
+
+                console.log(searchRect.bounds.f.b + " " + searchRect.bounds.b.b + " ",
+                            searchRect.bounds.f.b + " " + searchRect.bounds.b.f + " ",
+                            searchRect.bounds.f.f + " " + searchRect.bounds.b.f + " ",
+                            searchRect.bounds.f.f + " " + searchRect.bounds.b.b
+                );
+
         		//Generates json and url-encodes it
 		      	var data = encodeURIComponent(JSON.stringify(searchRect.bounds));
 		      	fetch(API_SEARCH_AREA + data);

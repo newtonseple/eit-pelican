@@ -2,13 +2,14 @@ import argparse
 import threading
 import time
 from Queue import Queue
+from flight_logger import FlightLogger
 from flight import setup
 from flight.coarse_search import CoarseSearch
 from flight.near_search import NearSearch
 from barryvox import BarryvoxThread
 
 DRONE_CON_STRING = "0.0.0.0:14550"
-TAKEOFF_ALTITUDE = 10.0
+TAKEOFF_ALTITUDE = 3.0
 
 def main():
     # Parse arguments
@@ -31,6 +32,10 @@ def main():
 
 
 def start_search(vehicle, area):
+
+    flight_logger = FlightLogger(vehicle)
+    flight_logger.daemon = True
+    flight_logger.start()
 
     signal_queue = Queue()
 

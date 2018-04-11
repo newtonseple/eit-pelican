@@ -6,7 +6,7 @@ import time
 
 AIRSPEED = 1.0
 TOLERANCE = 0.7
-SEARCH_ALTITUDE = 10.0
+SEARCH_ALTITUDE = 3.0
 
 class NearSearch(threading.Thread):
 
@@ -37,8 +37,9 @@ class NearSearch(threading.Thread):
         while cont:
             while cont and not self.signal_queue.empty():
                 signal = self.signal_queue.get()
-                # if not signal[0]:
-                if signal[2] > 6:
+
+                if not signal[0]:
+                # if signal[2] > 6:
                     self.key_points.append(self.vehicle_location())
                     cont = False
 
@@ -97,6 +98,8 @@ class NearSearch(threading.Thread):
 
         print ">>>> PERSON LOCATED:"
         print ">>>>  lat:",lat,"  lon:",lon
+
+        self.vehicle.mode = VehicleMode("LAND")
 
     def vehicle_location(self):
         return self.vehicle.location.global_relative_frame
