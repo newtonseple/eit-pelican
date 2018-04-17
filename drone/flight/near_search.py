@@ -63,10 +63,15 @@ class NearSearch(threading.Thread):
         cont = True
         while cont:
 
-            signal = self.signal_queue.get(block=True)
+            signal_out = None
+            try:
+                signal = self.signal_queue.get(block=False)
+                signal_out = (signal[2] > 6) # (not signal[0])
+            except Queue.Empty:
+                signal_out = False
 
             #if not signal[0]:
-            if signal[2] > 6:
+            if signal_out:
                 self.key_points.append(self.vehicle_location())
                 cont = False
 
