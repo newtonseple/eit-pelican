@@ -39,6 +39,9 @@ def start_search(vehicle, area):
 
     signal_queue = Queue()
 
+    # t = threading.Thread(target=test_signal_feeder, args=(signal_queue, ))
+    # t.start()
+
     barryvox = BarryvoxThread(signal_queue)
     barryvox.daemon = True
     barryvox.start()
@@ -59,16 +62,37 @@ def coarse_mode(vehicle, area, signal_queue):
         pass
 
     cs.stop()
-    near_mode(vehicle, area, signal_queue)
+    last_target = cs.target
+    print("Last target: ")
+    print(last_target)
+    near_mode(vehicle, area, signal_queue, last_target)
 
 
-def near_mode(vehicle, area, signal_queue):
+def near_mode(vehicle, area, signal_queue, last_target):
 
     print "Start near search"
-    ns = NearSearch(vehicle, area, signal_queue)
+    ns = NearSearch(vehicle, area, signal_queue, last_target)
     ns.start()
 
     ns.join()
+
+
+# # Just a test
+# def test_signal_feeder(signal_queue):
+
+#     time.sleep(5)
+#     signal_queue.put((True, "normal", 5))
+#     time.sleep(7)
+#     signal_queue.put((False, "no_signal", 7))
+#     time.sleep(3)
+#     signal_queue.put((True, "normal", 5))
+#     time.sleep(7)
+#     signal_queue.put((False, "no_signal", 7))
+#     time.sleep(3)
+#     signal_queue.put((True, "normal", 5))
+#     time.sleep(7)
+#     signal_queue.put((False, "no_signal", 7))
+
 
 if __name__ == "__main__":
     main()

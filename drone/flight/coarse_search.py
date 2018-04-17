@@ -17,6 +17,7 @@ class CoarseSearch(threading.Thread):
         super(CoarseSearch, self).__init__()
         self._stop_event = threading.Event()
         self.vehicle = vehicle
+        self.target = None
 
         self.vehicle.airspeed = AIRSPEED
 
@@ -49,20 +50,19 @@ class CoarseSearch(threading.Thread):
     def run(self):
 
         targets = cycle(self.search_pattern)
-        target = next(targets)
+        self.target = next(targets)
 
-        self.vehicle.simple_goto(target, groundspeed=GROUNDSPEED)
+        self.vehicle.simple_goto(self.target, groundspeed=GROUNDSPEED)
 
         while self.keep_running():
-            print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, target), "m"
+            print "Lateral distance to target: ", "%.2f" % get_distance_metres(self.vehicle.location.global_relative_frame, self.target), "m"
 
-            if get_distance_metres(self.vehicle.location.global_relative_frame, target) <= TOLERANCE:
+            if get_distance_metres(self.vehicle.location.global_relative_frame, self.target) <= TOLERANCE:
                 print ">>> Target reached!"
-                target = next(targets)
-                self.vehicle.simple_goto(target, groundspeed=GROUNDSPEED)
+                self.target = next(targets)
+                self.vehicle.simple_goto(self.target, groundspeed=GROUNDSPEED)
 
-            #TODO: remove this, not needed.. if you do, also remember to comment out printouts, as they will spam you down
-            time.sleep(1)
+            time.sleep(1) # Soften busy-waiting
 
 
     def stop(self):
